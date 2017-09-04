@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+	<constant name="struts.i18n.encoding" value="utf-8"></constant>
+	<!-- 配置动态方法访问 -->
+	<constant name="struts.enable.DynamicMethodInvocation" value="true"></constant>
+	<package name="hellodemo" extends="struts-default" namespace="/">
+		<!-- 声明拦截器 -->
+		<interceptors>
+			<interceptor name="loginInterceptro" class="interceptor.LoginInterceptor"></interceptor>
+		</interceptors>
+		<global-results>
+			<result name="ok">/index.html</result>
+		</global-results>
+		<action name="hello_*" class="yatou.HelloAction" method="{1}">
+            <result name="user">/jsp/hello.jsp</result>
+        </action>
+        <action name="test" class="yatou.StrutsTest">
+        	
+        </action>
+        <action name="dynamic" class="yatou.DynamicMethodTest">
+        	
+        </action>
+         <action name="customer_*" class="yatou.CustomerAction" method="{1}">
+         	<interceptor-ref name="loginInterceptor">
+         		<!-- ​如果不进行另外配置，拦截器将会对action类中的所有方法进行拦截，如果想对某些方法不执行拦截，则需要配置 -->
+         		<param name="excludeMethods">add,save</param>
+         	</interceptor-ref>
+         	<!-- 在拦截器中有一个机制，如果使用了自定义的拦截器，则默认的就不会执行了，所以要手动引入使用默认的拦截器们 -->
+         	<interceptor-ref name="default-stack"></interceptor-ref>
+         	
+        	<result name="login">/jsp/success.jsp</result>
+        	<result name="login1">/jsp/success.jsp</result>
+        	<result name="login2">/jsp/success.jsp</result>
+        	<result name="login3">/jsp/success.jsp</result>
+        </action>
+        <action name="stack_*" class="yatou.ValueStackAction" method="{1}">
+        	<result name="valueStack">/jsp/valueStack.jsp</result>
+        </action>
+        
+    </package>
+    
+	<!-- 将分模块开发的程序员A和程序员B的包含进来 -->
+<!-- 	<include file="yatou/hello.xml"></include> -->
+
+</struts>
